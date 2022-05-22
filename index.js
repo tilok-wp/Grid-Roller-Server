@@ -23,8 +23,9 @@ async function run() {
     try {
         await client.connect();
         const productCollection = client.db('grid_roller_database').collection('product')
+        const blogCollection = client.db('grid_roller_database').collection('blog')
 
-        app.get('/products', async (req, res) => {
+        app.get('/product', async (req, res) => {
             const limit = parseInt(req.query.limit)
             const query = {}
             let products
@@ -35,6 +36,12 @@ async function run() {
                 products = await productCollection.find(query).toArray()
             }
             res.send(products)
+        })
+
+
+        app.get('/blog', async (req, res) => {
+            const blogs = await blogCollection.find({}).toArray()
+            res.send(blogs)
         })
 
     }

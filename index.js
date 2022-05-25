@@ -42,6 +42,7 @@ async function run() {
         const productCollection = client.db('grid_roller_database').collection('product')
         const blogCollection = client.db('grid_roller_database').collection('blog')
         const userCollection = client.db('grid_roller_database').collection('user')
+        const reviewCollection = client.db('grid_roller_database').collection('review')
 
         const verifyAdmin = async (req, res, next) => {
             const requesterEmail = req.decoded.email
@@ -68,7 +69,7 @@ async function run() {
         // Add product post
         app.post('/product', async (req, res) => {
             const product = req.body
-            const productInserted = await blogCollection.insertOne(product)
+            const productInserted = await productCollection.insertOne(product)
             res.send(productInserted)
         })
 
@@ -82,6 +83,12 @@ async function run() {
             const blog = req.body
             const blogInserted = await blogCollection.insertOne(blog)
             res.send(blogInserted)
+        })
+        // Add review post
+        app.post('/review', async (req, res) => {
+            const review = req.body
+            const reviewInserted = await reviewCollection.insertOne(review)
+            res.send(reviewInserted)
         })
         // Create user and generate access token
         app.put('/user/:email', async (req, res) => {

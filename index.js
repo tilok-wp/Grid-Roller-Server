@@ -191,6 +191,25 @@ async function run() {
             const orderInserted = await orderCollection.insertOne(order)
             res.send(orderInserted)
         })
+        // My orders API
+        app.get('/order/:eamil', verifyJWT, async (req, res) => {
+            const orderEmail = req.params.eamil
+            const decodedEmail = req.decoded.email
+            if (orderEmail === decodedEmail) {
+                const query = { email: orderEmail }
+                const orders = await orderCollection.find(query).toArray()
+                res.send(orders)
+            } else {
+                return res.status(403).send({ message: 'Forbidden access!' })
+            }
+        })
+
+        // All Orders Admin API
+
+        app.get('/order', verifyJWT, verifyAdmin, async (req, res) => {
+            const orders = await orderCollection.find({}).toArray()
+            res.send(orders)
+        })
 
 
 

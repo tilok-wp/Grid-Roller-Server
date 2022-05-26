@@ -210,6 +210,21 @@ async function run() {
             const orders = await orderCollection.find({}).toArray()
             res.send(orders)
         })
+        app.delete('/order/:_id', verifyJWT, async (req, res) => {
+            const id = req.params._id;
+            console.log(id)
+            const filter = { _id: ObjectId(id) }
+            const result = await orderCollection.deleteOne(filter);
+            res.send(result);
+        })
+
+        app.get('/payment/:_id', verifyJWT, async (req, res) => {
+            const id = req.params._id
+            // console.log(id)
+            const query = { _id: ObjectId(id) }
+            const order = await orderCollection.findOne(query)
+            res.send(order)
+        })
 
 
 
@@ -233,5 +248,5 @@ app.get('/', (req, res) => {
     res.send('Grid roller server is running...!')
 })
 app.listen(port, () => {
-    console.log('Grid roller server running port on: ', port)
+    console.log('Grid roller server running port on: ', port, process.env.STRIPE_SECRETE_KEY)
 })

@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const jwt = require('jsonwebtoken');
+const { ObjectId } = require('mongodb');
 
 
 require('dotenv').config()
@@ -72,6 +73,20 @@ async function run() {
             const productInserted = await productCollection.insertOne(product)
             res.send(productInserted)
         })
+        app.get('/product/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const productDetails = await productCollection.findOne(query)
+            res.send(productDetails)
+        })
+
+        app.delete('/product/:_id', verifyJWT, verifyAdmin, async (req, res) => {
+            const id = req.params._id;
+            // console.log(email)
+            const filter = { _id: ObjectId(id) }
+            const result = await productCollection.deleteOne(filter);
+            res.send(result);
+        })
 
         // Get blog post
         app.get('/blog', async (req, res) => {
@@ -83,6 +98,17 @@ async function run() {
             const blog = req.body
             const blogInserted = await blogCollection.insertOne(blog)
             res.send(blogInserted)
+        })
+
+        app.get('/review', async (req, res) => {
+            const limit = parseInt(req.query.limit)
+            let reviews
+            if (limit) {
+                reviews = await reviewCollection.find({}).limit(limit).toArray()
+            } else {
+                reviews = await reviewCollection.find({}).toArray()
+            }
+            res.send(reviews)
         })
         // Add review post
         app.post('/review', async (req, res) => {
@@ -125,6 +151,12 @@ async function run() {
             } else {
                 res.status(403).send({ message: 'Forbidden access!' })
             }
+        })
+        app.get('/admin/:email', async (req, res) => {
+            const email = req.params.email
+            const user = await userCollection.findOne({ email: email })
+            const isAdmin = user.role === 'admin'
+            res.send({ admin: isAdmin })
         })
 
 

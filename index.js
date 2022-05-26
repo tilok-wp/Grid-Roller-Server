@@ -44,6 +44,7 @@ async function run() {
         const blogCollection = client.db('grid_roller_database').collection('blog')
         const userCollection = client.db('grid_roller_database').collection('user')
         const reviewCollection = client.db('grid_roller_database').collection('review')
+        const orderCollection = client.db('grid_roller_database').collection('order')
 
         const verifyAdmin = async (req, res, next) => {
             const requesterEmail = req.decoded.email
@@ -136,11 +137,35 @@ async function run() {
             const users = await userCollection.find().toArray()
             res.send(users)
         })
+        // Get user
+        app.get('/user/:email', verifyJWT, async (req, res) => {
+            const email = req.params.email
+            const query = { email: email }
+            const user = await userCollection.findOne(query)
+            res.send(user)
+
+        })
+        // Update user
+        app.put('/user/update/:email', verifyJWT, async (req, res) => {
+            const email = req.params.email
+            const updateInfo = req.body
+            console.log(email, updateInfo)
+            const option = { upsert: true }
+
+            const filter = { email: email }
+            const updatedDoc = {
+                $set: updateInfo
+            }
+            const result = await userCollection.updateOne(filter, updatedDoc, option)
+            res.send(result)
+
+        })
+        // Make admin
         app.put('/user/admin/:email', verifyJWT, verifyAdmin, async (req, res) => {
             const email = req.params.email
             // console.log(req.params)
-            // const requesterEmail = req.decoded.email
-            // const requesterAccount = await userCollection.findOne({ email: requesterEmail })
+            const requesterEmail = req.decoded.email
+            const requesterAccount = await userCollection.findOne({ email: requesterEmail })
             if (requesterAccount.role === 'admin') {
                 const filter = { email: email }
                 const updatedDoc = {
@@ -157,6 +182,14 @@ async function run() {
             const user = await userCollection.findOne({ email: email })
             const isAdmin = user.role === 'admin'
             res.send({ admin: isAdmin })
+        })
+
+        // Add blog post
+        app.post('/order', async (req, res) => {
+            const order = req.body
+            console.log(order)
+            const orderInserted = await orderCollection.insertOne(order)
+            res.send(orderInserted)
         })
 
 

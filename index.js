@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
-
+const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
 
 require('dotenv').config()
 const port = process.env.PORT || 5000;
@@ -226,6 +226,18 @@ async function run() {
             res.send(order)
         })
 
+        app.post('/create-payment-intent', verifyJWT, async (req, res) => {
+            const order = req.body;
+            const price = order.price;
+            const amount = price * 100;
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: amount,
+                currency: 'usd',
+                payment_method_types: ['card']
+            });
+            res.send({ clientSecret: paymentIntent.client_secret })
+        });
+
 
 
 
@@ -248,5 +260,5 @@ app.get('/', (req, res) => {
     res.send('Grid roller server is running...!')
 })
 app.listen(port, () => {
-    console.log('Grid roller server running port on: ', port, process.env.STRIPE_SECRETE_KEY)
+    console.log('Grid roller server running port on: ', port)
 })

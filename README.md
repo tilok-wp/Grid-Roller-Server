@@ -6,9 +6,9 @@ Best quality painting ROLLER manufacturer
 
 ---
 
-## Client side source code: [https://github.com/programming-hero-web-course1/manufacturer-website-client-side-tilok-wp.git](https://github.com/programming-hero-web-course1/manufacturer-website-client-side-tilok-wp.git)
+## Client side source code: [https://github.com/tilok-wp/Grid-Roller-Client](https://github.com/tilok-wp/Grid-Roller-Client)
 
-## Server side source Code:[https://github.com/programming-hero-web-course1/manufacturer-website-server-side-tilok-wp.git](https://github.com/programming-hero-web-course1/manufacturer-website-server-side-tilok-wp.git)
+## Server side source Code:[https://github.com/tilok-wp/Grid-Roller-Server](https://github.com/tilok-wp/Grid-Roller-Server)
 
 ## Application Features:
 

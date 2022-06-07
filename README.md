@@ -11,13 +11,18 @@ Best quality painting ROLLER manufacturer
 ## Server side source Code:[https://github.com/tilok-wp/Grid-Roller-Server](https://github.com/tilok-wp/Grid-Roller-Server)
 
 ## Application Features:
-
-- Modern and clean view
-- Add product
-- Delete product
-- Login authentication and authorization
-- Order lot quantity (Min but not over available)
-- Dashboard
+Grid roller is the responsive web application.
+These app users can create account,
+Edit profile,
+Order place with payment,
+Manage orders
+review.
+Order lot quantity (Min but not over available) ##Admin Can
+Add product
+Delete product
+Manage all orders
+Manage admin and user
+Dashboard
 
 ## Frameworks and libraries use in this App For Backend server side
 
